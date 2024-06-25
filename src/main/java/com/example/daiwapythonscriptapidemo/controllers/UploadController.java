@@ -44,10 +44,8 @@ public class UploadController {
     }
     @PostMapping("/upload-save-by-string")
     public ResponseEntity<String> handleFileUploadSaveByString(
-            @RequestParam("files") List<MultipartFile> files,
-            @RequestParam("accessibility") List<String> accessibilityList,
-            @RequestParam("recipient") List<String> recipientList
-            ) {
+            @RequestPart("files") List<MultipartFile> files,
+            @RequestPart("data") HandleFileUploadDto data) {
 
         StringBuilder responseMessage = new StringBuilder();
 
@@ -65,8 +63,8 @@ public class UploadController {
                 fileEntity.setSaveByString(content);
                 fileEntity.setContentType(file.getContentType());
 
-                fileEntity.setAccessibility(accessibilityList);
-                fileEntity.setRecipient(recipientList);
+                fileEntity.setAccessibility(data.getAccessibility());
+                fileEntity.setRecipient(data.getRecipient());
                 fileRepository.save(fileEntity);
                 responseMessage.append("File saved to MongoDB successfully with ID: ")
                         .append(fileEntity.getId())
