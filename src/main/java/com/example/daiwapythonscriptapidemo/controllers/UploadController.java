@@ -33,9 +33,9 @@ public class UploadController {
 
     @PatchMapping("/report")
     public ResponseEntity<String> handlePatchReport(
-            @RequestParam("template_name") String templateName,
-            @RequestParam(value = "created_by", required = false) @Size(min = 3, max = 20) String createdBy,
-            @RequestParam(value = "script_name", required = false) @Size(min = 3, max = 20) String scriptName,
+            @RequestParam("template_name" /* required = true in default, so the null validation will enable */) String templateName,
+            @RequestParam(value = "created_by", required = false /* When required = false, null validation will disable */) @Size(min = 3, max = 20) String createdBy,
+            @RequestParam(value = "script_name", required = false) @Size(min = 3, max = 20) /* Validation string length */ String scriptName,
             @RequestParam(value = "filters", required = false) List<String> filters,
             @RequestParam(value = "recipients", required = false) List<String> recipients,
             @RequestParam(value = "status", required = false) String status,
@@ -65,7 +65,7 @@ public class UploadController {
 
     @PutMapping("/report")
     public ResponseEntity<String> handlePutReport(
-            @RequestParam("template_name")  String templateName,
+            @RequestParam("template_name" /* required = true in default, so the null validation will enable */)  String templateName,
             @RequestParam("created_by") @Size(min = 3, max = 20) String createdBy,
             @RequestParam("script_name") @Size(min = 3, max = 20) String scriptName,
             @RequestParam("filters") List<String> filters,
