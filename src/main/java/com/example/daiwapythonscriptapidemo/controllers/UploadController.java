@@ -63,14 +63,38 @@ public class UploadController {
         return ResponseEntity.ok("OK");
     }
 
-    @PutMapping("/report")
-    public ResponseEntity<String> handlePutReport(
+    @PutMapping("/report/case1")
+    public ResponseEntity<String> handlePutReportCase1(
             @RequestParam("template_name" /* required = true in default, so the null validation will enable */)  String templateName,
             @RequestParam("created_by") @Size(min = 3, max = 20) String createdBy,
             @RequestParam("script_name") @Size(min = 3, max = 20) String scriptName,
             @RequestParam("filters") List<String> filters,
             @RequestParam("recipients") List<String> recipients,
             @RequestParam("status") String status,
+            @RequestHeader("userId") String userId
+    ) {
+
+        ReportEntity reportEntity = reportRepository.findByTemplateName(templateName);
+
+        reportEntity.setCreatedBy(createdBy);
+        reportEntity.setScriptName(scriptName);
+        reportEntity.setFilters(filters);
+        reportEntity.setRecipients(recipients);
+        reportEntity.setStatus(status);
+
+        reportRepository.save(reportEntity);
+
+        return ResponseEntity.ok("OK");
+    }
+
+    @PutMapping("/report/case2")
+    public ResponseEntity<String> handlePutReportCase2(
+            @RequestParam("template_name" /* required = true in default, so the null validation will enable */) String templateName,
+            @RequestParam(value = "created_by", required = false /* When required = false, null validation will disable */) @Size(min = 3, max = 20) String createdBy,
+            @RequestParam(value = "script_name", required = false) @Size(min = 3, max = 20) /* Validation string length */ String scriptName,
+            @RequestParam(value = "filters", required = false) List<String> filters,
+            @RequestParam(value = "recipients", required = false) List<String> recipients,
+            @RequestParam(value = "status", required = false) String status,
             @RequestHeader("userId") String userId
     ) {
 
